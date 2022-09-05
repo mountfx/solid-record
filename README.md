@@ -10,7 +10,7 @@ Simple undo/redo primitive for solidjs
 
 🕹 Uses command pattern
 
-🧩 Works with signals, stores and custom primities
+🧩 Works with signals, stores and custom primitives
 
 ⛓ Share a single history between multiple signals and stores (mix and match)
 
