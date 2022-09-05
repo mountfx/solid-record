@@ -9,10 +9,15 @@
 Simple undo/redo primitive for solidjs
 
 🕹 Uses command pattern
+
 🧩 Works with signals, stores and custom primities
+
 ⛓ Share a single history between multiple signals and stores (mix and match)
+
 ✋ Pause and resume history
+
 📦 Commands can be merged into a single action
+
 🦾 Ability to manually record changes
 
 <hr />
