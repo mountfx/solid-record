@@ -41,3 +41,5 @@ import { record } from "solid-record";
 
 const [count, setCount, { undo, redo }] = record(createSignal(0));
 ```
+
+[Examples](https://stackblitz.com/edit/solid-record-examples?file=src/Examples.tsx)
