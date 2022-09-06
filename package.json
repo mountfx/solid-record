@@ -1,5 +1,5 @@
 {
-  "version": "0.0.0",
+  "version": "0.1.0",
   "name": "solid-record",
   "description": "Simple undo/redo primitive for solidjs",
   "license": "MIT",
@@ -16,7 +16,9 @@
   "private": false,
   "sideEffects": false,
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -55,6 +57,8 @@
     "vite": "^3.0.4",
     "vite-plugin-solid": "^2.3.0"
   },
-  "keywords": ["solid"],
+  "keywords": [
+    "solid"
+  ],
   "packageManager": "pnpm@7.5.0"
 }
