@@ -48,13 +48,16 @@ function createCommand<S extends Setter>(
 function createHistory(options: { depth?: number } = {}) {
   const [undos, setUndos] = createSignal<Command[][]>([]);
   const [redos, setRedos] = createSignal<Command[][]>([]);
+  const [snapshot, setSnapshot] = createSignal<Record<string, Command[]>>({});
 
   const [isPaused, setIsPaused] = createSignal(false);
   const [isBatched, setIsBatched] = createSignal(false);
 
+
   let depth = options.depth || 128;
   let deferPause = 0;
   let buffer: Command[] = [];
+  let setters: Setter[] = [];
 
   function add<S extends Setter>(
     setter: S,
@@ -80,11 +83,15 @@ function createHistory(options: { depth?: number } = {}) {
     else setIsPaused(true);
   }
 
+  function addCommands(commands: Command[], timeline: Command[][]) {
+    return limit([...timeline, commands.map(c => c.new())], depth);
+  }
+
   function undo() {
     const commands = undos().at(-1);
     if (!commands) return;
     setUndos((u) => u.slice(0, u.length - 1));
-    setRedos((r) => limit([...r, commands.map((c) => c.new())], depth));
+    setRedos((r) => addCommands(commands, r));
     commands.reverse().forEach((c) => c());
   }
 
@@ -92,7 +99,7 @@ function createHistory(options: { depth?: number } = {}) {
     const commands = redos().at(-1);
     if (!commands) return;
     setRedos((r) => r.slice(0, r.length - 1));
-    setUndos((u) => limit([...u, commands.map((c) => c.new())], depth));
+    setUndos((u) => addCommands(commands, u));
     commands.forEach((c) => c());
   }
 
@@ -122,6 +129,21 @@ function createHistory(options: { depth?: number } = {}) {
     deferPause = 0;
   }
 
+  function register(setter: Setter) {
+    setters.push(setter);
+  }
+
+  function capture(label: string) {
+    setSnapshot(s => ({ ...s, [label]: setters.map(s => createCommand(s)) }));
+  }
+
+  function restore(label: string) {
+    const commands = snapshot()[label];
+    if (!commands) return;
+    setUndos(u => addCommands(commands, u));
+    commands.forEach((c) => c());
+  }
+
   return {
     undos,
     redos,
@@ -132,8 +154,14 @@ function createHistory(options: { depth?: number } = {}) {
 
     batch,
     unbatch,
+
     pause,
     resume,
+
+    snapshot,
+    register,
+    capture,
+    restore,
 
     isPaused,
     isBatched,
@@ -142,10 +170,11 @@ function createHistory(options: { depth?: number } = {}) {
   };
 }
 
-function record<G extends object, S extends Setter>(
+function record<G, S extends Setter>(
   [getter, setter]: [G, S],
   history = createHistory()
 ) {
+  history.register(setter);
   type Record = [G, S, History];
   return [getter, (...args) => history.add(setter, ...args), history] as Record;
 }
