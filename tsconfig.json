@@ -13,6 +13,11 @@
     "noEmit": true,
     "isolatedModules": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
     "types": [],
     "baseUrl": "."
   },
