@@ -1,6 +1,8 @@
 import { createSignal } from 'solid-js';
 
 type Setter = (...args: any[]) => any;
+type Command = ReturnType<typeof createCommand>;
+type History = ReturnType<typeof createHistory>;
 
 function limit<A extends any[]>(array: A, length: number) {
   const diff = array.length - length;
@@ -14,15 +16,12 @@ function copy<T>(value: T): T {
   return value;
 }
 
-function equals(a: any, b: any) {
+function isEqual(a: any, b: any) {
   if (typeof a !== 'object') {
     return a === b;
   }
   return JSON.stringify(a) === JSON.stringify(b);
 }
-
-type Command = ReturnType<typeof createCommand>;
-type History = ReturnType<typeof createHistory>;
 
 function createCommand<S extends Setter>(
   setter: S,
@@ -42,7 +41,7 @@ function createCommand<S extends Setter>(
 
   return Object.assign(() => setter(...path, prevValue), {
     new: () => createCommand(setter, ...args),
-    hasChanged: () => !equals(prevValue, nextValue),
+    hasChanged: () => !isEqual(prevValue, nextValue),
   });
 }
 
@@ -106,7 +105,9 @@ function createHistory(options: { depth?: number } = {}) {
   }
 
   function unbatch() {
-    setUndos((u) => limit([...u, buffer], depth));
+    if (buffer.length > 0) {
+      setUndos((u) => limit([...u, buffer], depth));
+    }
     setIsBatched(false);
     buffer = [];
   }
