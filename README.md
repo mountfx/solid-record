@@ -54,6 +54,72 @@ Accepts an options object as argument, which allows to define a maximum depth.
 const { undo, redo, ... } = createHistory({ depth: 24 });
 ```
 
+### Methods
+
+#### `undo()`
+
+Undoes the last commands on the `undos` stack.
+Adds commands to the `redos` stack.
+
+#### `redo()`
+
+Redoes the last commands on the `redos` stack.
+Adds commands to the `undos` stack.
+
+#### `add()`
+
+Manually add commands by prodiving the setter as the fist argument and it's argument thereafter and calls the setter with the arguments afterwards.
+
+The `record()` simpley wraps signals or stores and that calls this function on every change.
+
+#### `batch()`
+
+Batch multiple updates together into one command.
+If a callback function is provided it will automatically unbatch at the end.
+
+#### `unbatch()`
+
+Unbatch updates to resume recording normally.
+
+#### `pause()`
+
+Pauses recording.
+Accepts a number as argument, which lets you defer pausing the recording after # updates.
+
+#### `resume()`
+
+Resumes recording.
+
+#### `register()`
+
+Accepts a setter function as argument. Only setters that are registered can be captured using the `capture()` method.
+
+Using the `record()` function will automatically register the setter of a given signal or store.
+
+#### `capture()`
+
+Caches current state. Accepts a `string` as an argument that can be used to restore the state.
+
+#### `restore()`
+
+Restores a captured state. Accepts a `string` as an argument used while capturing.
+
+#### `isPaused()`
+
+Returns a `boolean` that indicates whether or not the recording is paused.
+
+#### `isBatched()`
+
+Returns a `boolean` that indicates whether or not updates are currently batched.
+
+#### `isUndoable()`
+
+Returns `true` if the `undos` stack is not empty.
+
+#### `isRedoable()`
+
+Returns `true` if the `redos` stack is not empty.
+
 ## `record()`
 
 The `record` function accepts 2 parameters:
@@ -64,6 +130,8 @@ The `record` function accepts 2 parameters:
 `record()` returns a tuple where the first two items are the getter and setter of the provided signal or store (with full typechecking) and the 3rd is the history object.
 
 If no history is provided as the 2nd argument `record()` will create one.
+
+Note that setting a recorded value will clear the redo stack if it's not empty.
 
 ```tsx
 // Record returns a getter, setter and history object
