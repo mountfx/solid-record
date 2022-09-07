@@ -52,7 +52,6 @@ function createHistory(options: { depth?: number } = {}) {
   const [isPaused, setIsPaused] = createSignal(false);
   const [isBatched, setIsBatched] = createSignal(false);
 
-
   let depth = options.depth || 128;
   let deferPause = 0;
   let buffer: Command[] = [];
