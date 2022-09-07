@@ -68,9 +68,13 @@ Adds commands to the `undos` stack.
 
 #### `add()`
 
-Manually add commands by prodiving the setter as the fist argument and it's argument thereafter and calls the setter with the arguments afterwards.
+`add()` allows you to manually record updates.
 
-The `record()` simpley wraps signals or stores and that calls this function on every change.
+Instead of updating signals or stores directly use the `add()` method instead, by providing the setter function as the first argument and the update path, callback function or value thereafter.
+
+It calls the setter, creates a command and add it to the `undos` stack.
+
+Internally, the `record()` function wraps signals or stores and calls this function on every change.
 
 #### `batch()`
 
@@ -93,6 +97,8 @@ Resumes recording.
 #### `register()`
 
 Accepts a setter function as argument. Only setters that are registered can be captured using the `capture()` method.
+
+If you are manually recording updates using the `add()` method, make sure you also register the setter function.
 
 Using the `record()` function will automatically register the setter of a given signal or store.
 
