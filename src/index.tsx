@@ -55,7 +55,7 @@ function createHistory(options: { depth?: number } = {}) {
   let depth = options.depth || 128;
   let deferPause = 0;
   let buffer: Command[] = [];
-  let memory: { [key: string]: Command[] } = {}
+  let memory: { [key: string]: Command[] } = {};
   let setters: Setter[] = [];
 
   function add<S extends Setter>(
@@ -83,7 +83,7 @@ function createHistory(options: { depth?: number } = {}) {
   }
 
   function addCommands(commands: Command[], timeline: Command[][]) {
-    return limit([...timeline, commands.map(c => c.new())], depth);
+    return limit([...timeline, commands.map((c) => c.new())], depth);
   }
 
   function undo() {
@@ -133,13 +133,13 @@ function createHistory(options: { depth?: number } = {}) {
   }
 
   function capture(label: string) {
-    memory[label] = setters.map(s => createCommand(s));
+    memory[label] = setters.map((s) => createCommand(s));
   }
 
   function restore(label: string) {
     const commands = memory[label];
     if (!commands) return;
-    setUndos(u => addCommands(commands, u));
+    setUndos((u) => addCommands(commands, u));
     commands.forEach((c) => c());
   }
 
