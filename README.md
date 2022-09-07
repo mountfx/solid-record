@@ -20,7 +20,9 @@
 
 🌌 Capture recorded state and restore it
 
-**[Examples](https://stackblitz.com/edit/solid-record-examples?file=src/Examples.tsx)**
+---
+
+**[Examples on ⚡️ Stackblitz](https://stackblitz.com/edit/solid-record-examples?file=src/Examples.tsx)**
 
 ---
 
@@ -46,9 +48,9 @@ const [count, setCount, { undo, redo }] = record(createSignal(0));
 
 ## `createHistory()`
 
-Exposes all function to traverse the recorded state.
+Exposes all methods to access and traverse recorded state.
 
-Accepts an options object as argument, which allows to define a maximum depth.
+Accepts an `options` object as argument, which allows you to define a maximum `depth`.
 
 ```tsx
 const { undo, redo, ... } = createHistory({ depth: 24 });
@@ -70,20 +72,21 @@ Adds commands to the `undos` stack.
 
 `add()` allows you to manually record updates.
 
-Instead of updating signals or stores directly use the `add()` method instead, by providing the setter function as the first argument and the update path, callback function or value thereafter.
+Instead of updating signals or stores directly you can use the `add()` method instead, by providing the setter function as the first argument and the update path, callback function or value thereafter.
 
-It calls the setter, creates a command and add it to the `undos` stack.
+It calls the setter, creates a command and adds it to the `undos` stack.
 
-Internally, the `record()` function wraps signals or stores and calls this function on every change.
+Internally, the `record()` function wraps signals or stores and calls `add()` function on every update.
 
 #### `batch()`
 
-Batch multiple updates together into one command.
-If a callback function is provided it will automatically unbatch at the end.
+Batch multiple updates together into one command. The command will be added to the `undos` stack when `unbatch()` is called.
+
+If a callback function is provided it will automatically call `unbatch()` at the end.
 
 #### `unbatch()`
 
-Unbatch updates to resume recording normally.
+Unbatches updates, add them to the `undos` stack and resume recording normally.
 
 #### `pause()`
 
@@ -110,21 +113,23 @@ Caches current state. Accepts a `string` as an argument that can be used to rest
 
 Restores a captured state. Accepts a `string` as an argument used while capturing.
 
+Restoring state is an undoable action.
+
 #### `isPaused()`
 
-Returns a `boolean` that indicates whether or not the recording is paused.
+Returns `true` if recording is paused, otherwise returns `false`.
 
 #### `isBatched()`
 
-Returns a `boolean` that indicates whether or not updates are currently batched.
+Returns `true` if updates are currently batched, otherwise returns `false`.
 
 #### `isUndoable()`
 
-Returns `true` if the `undos` stack is not empty.
+Returns `true` if the `undos` stack is not empty, otherwise returns `false`.
 
 #### `isRedoable()`
 
-Returns `true` if the `redos` stack is not empty.
+Returns `true` if the `redos` stack is not empty, otherwise returns `false`.
 
 ## `record()`
 
