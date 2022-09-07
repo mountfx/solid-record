@@ -155,6 +155,6 @@ const [person, setPerson, history] = record(createStore({ name: "John" }));
 
 const history = createHistory();
 
-const [count, setCount, history] = record(createSignal(0), history);
-const [person, setPerson, history] = record(createStore({ name: "John" }, history));
+const [count, setCount] = record(createSignal(0), history);
+const [person, setPerson] = record(createStore({ name: "John" }, history));
 ```
