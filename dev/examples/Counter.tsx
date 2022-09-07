@@ -6,9 +6,9 @@ import { record } from "../../src";
 const Counter = () => {
   const [count, setCount] = record(createSignal(0), history);
   return (
-    <div>
+    <section>
       <button onClick={() => setCount((c) => c + 1)}>{count()}</button>
-    </div>
+    </section>
   );
 };
 

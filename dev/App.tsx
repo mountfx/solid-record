@@ -10,29 +10,26 @@ const App = () => {
   return (
     <div style={{ display: "grid", gap: "24px" }}>
       <Controls />
-      <section><Counter /></section>
-      <section><Store /></section>
-      <section><Draggable /></section>
+      <Counter />
+      <Store />
+      <Draggable />
     </div>
   );
 };
 
 const Controls = () => {
-  const snapshot = "my-snapshot";
+  const memory = "my-memory";
   return (
     <>
       <div class="header actions">
         <button disabled={!history.isUndoable()} onClick={history.undo}>
-          Undo ({history.undos().length})
+          Undo ({history.undos.length})
         </button>
         <button disabled={!history.isRedoable()} onClick={history.redo}>
-          Redo ({history.redos().length})
+          Redo ({history.redos.length})
         </button>
-        <button onClick={() => {
-          history.snapshot()[snapshot] ? history.restore(snapshot) : history.capture(snapshot);
-        }}>
-          {history.snapshot()[snapshot] ? "Restore snapshot" : "Capture snapshot"}
-        </button>
+        <button onClick={() => history.capture(memory)}>Capture memory</button>
+        <button onClick={() => history.restore(memory)}>Restore memory</button>
       </div>
     </>
   )

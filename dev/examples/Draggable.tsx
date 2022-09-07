@@ -25,21 +25,23 @@ const Draggable = () => {
   onCleanup(() => window.removeEventListener('pointerdown', handlePointerDown));
 
   return (
-    <div
-      onPointerDown={handlePointerDown}
-      style={{
-        transform: `translate(${position().x}px, ${position().y}px)`,
-        width: '80px',
-        height: '80px',
-        background: 'pink',
-        display: 'grid',
-        cursor: 'move',
-        "border-radius": "8px",
-        'place-content': 'center',
-      }}
-    >
-      Drag me
-    </div>
+    <section>
+      <div
+        onPointerDown={handlePointerDown}
+        style={{
+          transform: `translate(${position().x}px, ${position().y}px)`,
+          width: '80px',
+          height: '80px',
+          background: 'pink',
+          display: 'grid',
+          cursor: 'move',
+          "border-radius": "8px",
+          'place-content': 'center',
+        }}
+      >
+        Drag me
+      </div>
+    </section>
   );
 };
 

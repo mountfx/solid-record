@@ -48,7 +48,6 @@ function createCommand<S extends Setter>(
 function createHistory(options: { depth?: number } = {}) {
   const [undos, setUndos] = createSignal<Command[][]>([]);
   const [redos, setRedos] = createSignal<Command[][]>([]);
-  const [snapshot, setSnapshot] = createSignal<Record<string, Command[]>>({});
 
   const [isPaused, setIsPaused] = createSignal(false);
   const [isBatched, setIsBatched] = createSignal(false);
@@ -57,6 +56,7 @@ function createHistory(options: { depth?: number } = {}) {
   let depth = options.depth || 128;
   let deferPause = 0;
   let buffer: Command[] = [];
+  let memory: { [key: string]: Command[] } = {}
   let setters: Setter[] = [];
 
   function add<S extends Setter>(
@@ -134,19 +134,23 @@ function createHistory(options: { depth?: number } = {}) {
   }
 
   function capture(label: string) {
-    setSnapshot(s => ({ ...s, [label]: setters.map(s => createCommand(s)) }));
+    memory[label] = setters.map(s => createCommand(s));
   }
 
   function restore(label: string) {
-    const commands = snapshot()[label];
+    const commands = memory[label];
     if (!commands) return;
     setUndos(u => addCommands(commands, u));
     commands.forEach((c) => c());
   }
 
   return {
-    undos,
-    redos,
+    get undos() {
+      return undos();
+    },
+    get redos() {
+      return redos();
+    },
 
     add,
     undo,
@@ -158,7 +162,6 @@ function createHistory(options: { depth?: number } = {}) {
     pause,
     resume,
 
-    snapshot,
     register,
     capture,
     restore,

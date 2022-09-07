@@ -12,13 +12,13 @@ const Store = () => {
     history,
   );
   return (
-    <div>
+    <section>
       <div class="actions">
         <button onClick={() => setPeople(0, "name", "surname", "Peter")}>Change name</button>
         <button onClick={() => setPeople(1, produce(p => p.age++))}>Increase age</button>
       </div>
       <pre>{JSON.stringify(people, null, 2)}</pre>
-    </div>
+    </section>
   );
 };
 
