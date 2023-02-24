@@ -8,17 +8,12 @@
 
 **Simple undo/redo primitive for solidjs using the command pattern**
 
-🧩 Use it with signals, stores and custom primitives
-
-⛓ Share a single history between multiple signals and stores
-
-✋ Pause and resume history
-
-📦 Merge commands into a single action
-
-🦾 Manually record changes
-
-🌌 Capture recorded state and restore it
+* Use it with signals, stores and custom primitives
+* Share a single history between multiple signals and stores
+* Pause and resume history
+* Merge commands into a single action
+* Manually record changes
+* Capture recorded state and restore it
 
 ---
 
